@@ -1,0 +1,17 @@
+ion-tab-bar {
+  background: #000;
+  --ion-background-color: #000; /* Opzionale, per supporto a tema */
+ion-label{
+  color:#fff;
+}
+ion-icon{
+  color:#fff;
+  
+}
+}
+ion-item {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+  }

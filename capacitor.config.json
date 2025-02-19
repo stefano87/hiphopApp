@@ -1,0 +1,12 @@
+{
+    "appId": "hip_hop_beats_instrumental.dev127586.app689033",
+    "appName": "Hip Hop Instrumental Beats",
+    "plugins": {
+      "Media": {
+        "permissions": [
+          "READ_MEDIA_AUDIO",
+          "WRITE_EXTERNAL_STORAGE"
+        ]
+      }
+    }
+  }

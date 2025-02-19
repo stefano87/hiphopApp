@@ -1,0 +1,53 @@
+.popup-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .rating-card {
+    width: 90%;
+    max-width: 350px;
+    margin: 0;
+    border-radius: 16px;
+    position: relative;
+  }
+
+  .close-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
+    color:#000;
+  }
+
+  ion-card-content {
+    padding: 24px 16px;
+  }
+
+  .rating-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+
+  .rate-button {
+    margin: 16px 0;
+  }
+
+  .later-button {
+    margin-top: 8px;
+    --color: var(--ion-color-medium);
+  }

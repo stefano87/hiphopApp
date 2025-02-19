@@ -1,0 +1,127 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="header-content">
+      <div class="title-section">
+        <img src="../../../../assets/logo.webp">
+        <div class="title-text">
+          <h1>Favorites</h1>
+          <p>Your Favorites Instrumentals</p>
+        </div>
+      </div>
+      
+      <ion-buttons slot="end">
+        <ion-button (click)="openInfoModal()">
+           <ion-icon name="information-circle-outline" class="main-icon"></ion-icon>     
+        </ion-button>
+      </ion-buttons>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list [ngClass]="{'recording-mode': isAnyBeatRecording()}">
+    <ion-item *ngIf="favorites.length === 0">
+      <ion-label>
+        <h2> No favorites selected, add one by clicking on the heart</h2>
+        </ion-label>
+    </ion-item>
+    <ion-item *ngFor="let favorite of favorites" [ngClass]="{'hidden': isAnyBeatRecording() && !favorite.isRecording}">
+      <ion-label>
+        <h2>{{ favorite.name }}</h2>
+        <p>Hip Hop Beat</p>
+      </ion-label>
+      
+      <ion-button fill="clear" (click)="playBeat(favorite)">
+        <ion-icon slot="icon-only" [name]="favorite.isPlaying ? 'pause-outline' : 'play-outline'"></ion-icon>
+      </ion-button>
+           
+      <ion-button *ngIf="!favorite.isRecording" color="success" (click)="startRecording(favorite)">
+        <ion-icon slot="start" name="radio-outline"></ion-icon>
+        Record
+      </ion-button>
+      
+      <ion-button *ngIf="favorite.isRecording" color="danger" (click)="stopRecording(favorite)">
+        <ion-icon slot="start" name="stop-outline"></ion-icon>
+        Stop
+      </ion-button>
+
+      <ion-button slot="end" fill="clear" color="danger" (click)="toggleFavorite(favorite)">
+        <ion-icon name="heart-dislike" slot="icon-only"></ion-icon>
+      </ion-button>
+      
+  
+    </ion-item>
+  </ion-list>
+
+  
+
+  <div class="selected-beat" *ngIf="selectedBeat">
+    <div class="header">
+      <h3>Recording Details <span *ngIf="selectedBeat?.isRecording" class="recording-timer">
+        <span>⏺️ {{ formatTime(recordingTime) }}</span>
+      </span> </h3>
+      
+      <button class="close-button" (click)="closeSelectedBeat()">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </button>
+    </div>
+
+    <div class="content">
+      <div class="beat-info">
+        <ion-icon name="musical-notes-outline" class="beat-icon"></ion-icon>
+        <h4>{{ selectedBeat.name }}</h4>
+      </div>
+
+      <div class="recording-stats" *ngIf="recordedDuration">
+        <ion-icon name="time-outline" class="duration-icon"></ion-icon>
+        <p>{{ recordedDuration }}</p>
+      </div>
+
+      <div class="actions">
+        <ion-button *ngIf="recordingData && !isRecordingDownloaded" 
+                    expand="block" 
+                    color="success" 
+                    class="action-button"
+                    (click)="saveRecording()">
+          <ion-icon slot="start" name="save-outline"></ion-icon>
+          Save Recording
+        </ion-button>
+
+        <ion-button *ngIf="recordingData && isRecordingDownloaded" 
+                    expand="block" 
+                    color="primary" 
+                    class="action-button"
+                    (click)="openFile(savedFilePath)">
+          <ion-icon slot="start" name="folder-open-outline"></ion-icon>
+          Open Saved Recording
+        </ion-button>
+
+        <ion-button *ngIf="recordedAudio && !playRecordedAudio" 
+                    expand="block" 
+                    color="tertiary"
+                    class="action-button"
+                    (click)="playRecording()">
+          <ion-icon slot="start" name="play-outline"></ion-icon>
+          Play Recording
+        </ion-button>
+
+        <ion-button *ngIf="recordedAudio && playRecordedAudio" 
+                    expand="block" 
+                    color="danger"
+                    class="action-button"
+                    (click)="stopPlayRecording()">
+          <ion-icon slot="start" name="stop-outline"></ion-icon>
+          Stop Playback
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <div class="countdown-overlay" *ngIf="showCountdown">
+    <div class="countdown-content">
+      <div class="countdown-number">{{countdownNumber}}</div>
+      <div class="countdown-text">Crush it, brother! 🚀</div>
+    </div>
+  </div>
+
+</ion-content>

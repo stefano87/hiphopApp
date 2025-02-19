@@ -1,0 +1,38 @@
+<ion-content class="ion-padding">
+  <div class="popup-container">
+    <ion-card class="rating-card">
+      <ion-buttons class="close-button">
+        <ion-button fill="clear" (click)="dismiss()">
+          ❌ Close
+        </ion-button>
+      </ion-buttons>
+
+      <ion-card-content class="ion-text-center">
+        <ion-icon 
+          name="star" 
+          class="rating-icon"
+          color="warning">
+        </ion-icon>
+        
+        <h2>⭐ Do you like our app? ⭐</h2>  
+        <p>Your feedback means a lot to us! ❤️ If you enjoy using our app, please leave ⭐⭐⭐⭐⭐ or a review! 📝</p>
+        
+        <ion-button 
+          expand="block" 
+          class="rate-button" 
+          (click)="rateNow()"
+          color="primary">
+          📝 Leave a Review
+        </ion-button>
+        
+        <ion-button 
+          fill="clear" 
+          size="small" 
+          class="later-button" 
+          (click)="dismiss()">
+          ⏳ Maybe Later
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

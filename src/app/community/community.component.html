@@ -1,0 +1,71 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="header-content">
+      <div class="title-section">
+        <img src="../../../../assets/logo.webp">
+        <div class="title-text">  
+          <h1>Community</h1>
+          <p>The world is ready to hear you</p>
+        </div>
+      </div>
+      
+      <ion-buttons slot="end">
+        <ion-button (click)="openInfoModal()">
+           <ion-icon name="information-circle-outline" class="main-icon"></ion-icon>     
+        </ion-button>
+      </ion-buttons>
+    </div>
+  </ion-toolbar>
+</ion-header>
+<ion-modal [keepContentsMounted]="true" trigger="open-modal" #modal>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="modal.dismiss()">Close</ion-button>
+        </ion-buttons>
+        <ion-title>App 4 Lov</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding"> We are a team of passionate developers, specializing in creating innovative and intuitive solutions. With a blend of creativity and technology, we develop high-performance, user-friendly apps designed to provide the best possible experience for our users. 🚀</ion-content>
+  </ng-template>
+</ion-modal>
+<ion-content [fullscreen]="true" class="ion-padding dark-theme">
+  <div class="container">
+    <ion-card class="custom-card">
+      <ion-card-content>
+        <h1 class="gradient-text">Want to gain more visibility?</h1>
+        <p class="subtitle">
+          Don’t keep your songs to yourself, share them with all the app users.
+        </p>
+        <div class="price">Do you want to showcase your song here? Contact me to know how to proceed.</div>
+
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+          <ion-item>
+            <ion-label position="floating">Name</ion-label>
+            <ion-input type="text" formControlName="name"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Email address</ion-label>
+            <ion-input type="email" formControlName="email"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Message</ion-label>
+            <ion-textarea formControlName="message" rows="4"></ion-textarea>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-checkbox slot="start" formControlName="privacy"></ion-checkbox>
+            <ion-label slot="start" class="ion-padding-start">I accept the privacy policy</ion-label>
+          </ion-item>
+
+          <ion-button expand="block" type="submit" [disabled]="!contactForm.valid">
+            Request Information
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

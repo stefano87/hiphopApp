@@ -1,0 +1,96 @@
+.modal-container {
+    height: 100%;
+    background: var(--ion-background-color);
+    position: relative;
+    padding: 5px 20px;
+  }
+
+  .close-button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 10;
+  }
+
+  .content-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .header-section {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .company-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .subtitle {
+    color: var(--ion-color-medium);
+    margin-top: 5px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 0px;
+  }
+
+  .feature-card {
+    margin: 0;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-radius: 12px;
+    
+    ion-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+    }
+
+    p {
+      font-size: 14px;
+      color: var(--ion-color-medium);
+      margin: 0;
+    }
+  }
+
+  .about-section {
+    text-align: center;
+    padding: 0;
+    
+    p {
+      color: var(--ion-color-medium);
+      line-height: 1.6;
+    }
+  }
+
+  .social-section {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+    
+    .social-button {
+      --padding-start: 10px;
+      --padding-end: 10px;
+      
+      ion-icon {
+        font-size: 24px;
+      }
+    }
+  }

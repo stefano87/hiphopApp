@@ -1,0 +1,130 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import '@ionic/angular/css/palettes/dark.system.css';
+
+:root {
+    --background-image: url('assets/background-hiphop.webp');
+  }
+  ion-toolbar {
+    --background: linear-gradient(135deg, #232323 0%, #2d2d2d 100%);
+    --border-width: 0 !important;
+    padding-top: 10px !important;
+    padding-bottom:10px;
+  }
+  ion-tab-bar {
+    --background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    --border-width: 0 !important;
+    padding: 0px 0 0 0;
+    margin-bottom: 60px;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+  }
+
+  .title-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .main-icon {
+    font-size: 2.4rem;
+    color: #4CAF50;
+  }
+
+  .title-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .title-text h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+  }
+
+  .title-text p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #b3b3b3;
+    font-weight: 500;
+  }
+
+  .about-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+  }
+
+  .about-button ion-icon {
+    font-size: 1.8rem;
+    color: #4CAF50;
+  }
+  .info-modal {
+    --height: 90%;
+    --width: 90%;
+    --max-width: 600px;
+    --border-radius: 20px;
+    
+    &::part(content) {
+      border-radius: 20px;
+    }
+  
+    ion-content {
+      --background: var(--ion-background-color);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .title-text h1 {
+      font-size: 1.2rem;
+    }
+
+    .title-text p {
+      font-size: 0.8rem;
+    }
+
+    .main-icon {
+      font-size: 2rem;
+    }
+  }
