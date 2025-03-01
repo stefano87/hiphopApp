@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ModalController,IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, 
-         IonLabel, IonButton, IonIcon, IonToast,ToastController, IonButtons, IonTabButton, IonTabs, IonTabBar, IonModal } from '@ionic/angular/standalone';
+         IonLabel, IonButton, IonIcon, IonToast,ToastController, IonButtons, IonTabButton, IonTabs, IonTabBar, IonModal, IonProgressBar } from '@ionic/angular/standalone';
 import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { RatingService } from '../services/rating.service';
 import { RatingPopupComponent } from '../rating-popup/rating-popup.component';
@@ -9,7 +9,6 @@ import { Filesystem, Directory } from '@capacitor/filesystem';
 import { FileOpener } from '@capawesome-team/capacitor-file-opener';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Preferences } from '@capacitor/preferences';
-import { AdMob, BannerAdSize, BannerAdPosition, AdOptions } from '@capacitor-community/admob';
 import { AdMobService } from '../services/admob.service';
 import { 
   playOutline, 
@@ -39,7 +38,7 @@ interface Beat {
 @Component({
   selector: 'app-beat-list',
   standalone: true,
-  imports: [IonModal, IonTabBar, IonTabs, IonTabButton, IonButtons, 
+  imports: [IonProgressBar, IonModal, IonTabBar, IonTabs, IonTabButton, IonButtons, 
     IonIcon, 
     IonButton,
     IonLabel,
@@ -54,8 +53,8 @@ interface Beat {
     RatingPopupComponent
   ],
   providers: [
-    ModalController,     // Aggiungi questo
-    RatingService       // E questo se non l'hai già fatto
+    ModalController,
+    RatingService
   ],
   templateUrl: './beat-list.component.html',
   styleUrls: ['./beat-list.component.scss'],
@@ -373,26 +372,28 @@ export class BeatListComponent implements OnInit, OnDestroy {
     { id: 297, name: 'Beat 297', url: 'https://www.gadgetchespaccano.it/trap/trap10.mp3', isPlaying: false, isRecording: false },
     { id: 298, name: 'Beat 298', url: 'https://www.gadgetchespaccano.it/trap/trap9.mp3', isPlaying: false, isRecording: false },
 
-  ];
-  
+  ];	
   @ViewChild(IonModal) modal?: IonModal;
   selectedBeat: Beat | null = null;
   currentAudioElement: HTMLAudioElement | null = null;
   isRecording: boolean = false;
   recordingData: any = null;
-  recordedAudio: string | null = null;
+  recordingFilePath: string | null = null; // Modificato: percorso del file invece di Base64
   playRecordedAudio: boolean = false;
   isRecordingDownloaded: boolean = false;
   showCountdown: boolean = false;
   countdownNumber: number = 3;
   private countdownInterval: any;
-  audioPlayer: HTMLAudioElement | null = null; // Mantieni l'istanza globale dell'audio
-  recordingTime: number = 0; // Tempo trascorso in secondi
-recordingInterval: any = null; // ID del setInterval
-recordedDuration: string = ''; // Durata finale registrata
-favorites: Beat[] = [];
+  audioPlayer: HTMLAudioElement | null = null;
+  recordingTime: number = 0;
+  recordingInterval: any = null;
+  recordedDuration: string = '';
+  favorites: Beat[] = [];
   savedFilePath: string = '';
-
+  currentFileName: string = '';
+maxRecordingTime: number = 240; // Massimo 4 minuti di registrazione
+// Aggiungi una variabile per calcolare il tempo rimanente
+remainingTime: number = 240;
   constructor(
     private toastController: ToastController,
     private favoritesService: FavoritesService,
@@ -404,46 +405,27 @@ favorites: Beat[] = [];
 
     this.favoritesService.favorites$.subscribe(favorites => {
       this.favorites = favorites;
-    });;
-    //this.initializeAdMob();
-    
+    });
   }
 
   async ngOnInit() {
     this.initializeApp();
-   
     console.log('Component initialized');
     await this.initializeRecorder();
     this.setupAudioEventListeners();
   }
-  //async initializeAdMob() {
-   // await AdMob.initialize();
 
-    // Mostra un banner
-   // AdMob.showBanner({
-   //   adId: 'ca-app-pub-5162875721816233/4852911129', // ID annuncio test
-   //   adSize: BannerAdSize.BANNER,
-   //   position: BannerAdPosition.BOTTOM_CENTER,
-   // });
-  //}
-
-  //async showInterstitialAd() {
-   // await AdMob.prepareInterstitial({
-   //   adId: 'ca-app-pub-5162875721816233/9130233335', // ID annuncio test
-   // });
-  //}
-
-  
   async initializeApp() {
     try {
       await SplashScreen.show({
-        showDuration: 2000, // durata in millisecondi
+        showDuration: 2000,
         autoHide: true
       });
     } catch (err) {
       console.log('Errore durante l\'inizializzazione dello splash screen', err);
     }
   }
+  
   async openInfoModal() {
     const modal = await this.modalCtrl.create({
       component: InfoModalComponent,
@@ -453,6 +435,7 @@ favorites: Beat[] = [];
     });
     await modal.present();
   }
+  
   async toggleFavorite(beat: Beat) {
     try {
       await this.favoritesService.toggleFavorite(beat);
@@ -467,14 +450,23 @@ favorites: Beat[] = [];
 
   ngOnDestroy() {
     this.cleanupAudio();
+    
+    // Pulisci gli intervalli se sono ancora attivi
+    if (this.recordingInterval) {
+      clearInterval(this.recordingInterval);
+    }
+    
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
   }
   
   // Funzione per formattare il tempo in mm:ss
-formatTime(seconds: number): string {
-  const minutes = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-}
+  formatTime(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
 
   private async initializeRecorder() {
     try {
@@ -567,30 +559,36 @@ formatTime(seconds: number): string {
       
       this.showCountdown = true;
       this.countdownNumber = 3;
- this.countdownInterval = setInterval(async () => {
-  this.countdownNumber--;
+      
+      this.countdownInterval = setInterval(async () => {
+        this.countdownNumber--;
 
-  if (this.countdownNumber === 0) {
-    clearInterval(this.countdownInterval);
-    this.showCountdown = false;
+        if (this.countdownNumber === 0) {
+          clearInterval(this.countdownInterval);
+          this.showCountdown = false;
 
-      await VoiceRecorder.startRecording();
-      this.beats.forEach(b => (b.isRecording = false)); // Assicura che tutti i beat siano non registranti
-    beat.isRecording = true; // Imposta il beat corrente come in registrazione
-    this.selectedBeat = beat; // Aggiorna il beat selezionato
-    console.log('Recording in progress: ', beat.isRecording);
-    await this.showToast('Recording started', 'success');
+          await VoiceRecorder.startRecording();
+          this.beats.forEach(b => (b.isRecording = false));
+          beat.isRecording = true;
+          this.selectedBeat = beat;
+          console.log('Recording in progress: ', beat.isRecording);
+          await this.showToast('Recording started', 'success');
 
-    this.playBeat(beat);
+          this.playBeat(beat);
 
-    this.recordingTime = 0; // Resetta il timer
-    this.recordingInterval = setInterval(() => {
-      this.recordingTime++;
-    }, 1000); // Aggiorna il timer ogni secondo
+          this.recordingTime = 0;
+          this.recordingInterval = setInterval(() => {
+            this.recordingTime++;
+            this.remainingTime = this.maxRecordingTime - this.recordingTime;
 
-      //this.selectedBeat = beat;
-}
-    }, 1000);
+              // Interrompi quando si raggiunge il limite di tempo
+              if (this.recordingTime >= this.maxRecordingTime) {
+                this.stopRecording(beat);
+                this.showToast('Limite di registrazione di 4 minuti raggiunto', 'danger');
+              }
+            }, 1000);
+        }
+      }, 1000);
 
     } catch (error) {
       console.error('Error starting recording:', error);
@@ -598,41 +596,57 @@ formatTime(seconds: number): string {
     }
   }
 
-  async stopRecording(beat:Beat) {
-    if (!beat.isRecording) return;
+  // Aggiungi questo metodo per formattare il tempo rimanente in mm:ss
+formatRemainingTime(): string {
+  return this.formatTime(this.remainingTime);
+}
 
-    try {
-      const recording = await VoiceRecorder.stopRecording();
-      this.recordingData = recording;
-      this.recordedAudio = recording.value.recordDataBase64;
-      beat.isRecording = false;
+async stopRecording(beat: Beat) {
+  if (!beat.isRecording) return;
 
-      // Ferma il timer
+  try {
+    // Ferma il timer
     clearInterval(this.recordingInterval);
     this.recordingInterval = null;
-    this.recordedDuration = this.formatTime(this.recordingTime); // Salva la durata finale
-
+    this.recordedDuration = this.formatTime(this.recordingTime);
     
-      await this.showToast('Recording completed', 'success');
-      this.selectedBeat = beat;
-      this.stopBeat();
+    // Ferma la registrazione e ottieni i dati in Base64
+    const recording = await VoiceRecorder.stopRecording();
+    this.recordingData = recording; // Mantieni questo per la compatibilità UI
+    
+    // Genera un nome file univoco
+    const fileName = `recording_${new Date().getTime()}.wav`;
+    
+    // Salva direttamente nella directory Cache
+    const result = await Filesystem.writeFile({
+      path: fileName,
+      data: recording.value.recordDataBase64,
+      directory: Directory.Cache
+    });
+    
+    // Salva sia il percorso che il nome del file
+    this.currentFileName = fileName;
+    this.recordingFilePath = result.uri;
+    
+    // Log per debug
+    console.log('File salvato in cache:', result.uri);
+    console.log('Nome file:', this.currentFileName);
+    
+    // NON cancellare recordingData qui se il tuo HTML dipende da esso
+    // Non fare: this.recordingData.value.recordDataBase64 = '';
+    
+    beat.isRecording = false;
+    await this.showToast('Recording completed', 'success');
+    this.selectedBeat = beat;
+    this.stopBeat();
 
-      await this.adMobService.showInterstitial();
-
-    } catch (error) {
-      console.error('Error stopping recording:', error);
-      await this.showToast('Error stopping the recording', 'danger');
-    }
+    await this.adMobService.showInterstitial();
+  } catch (error) {
+    console.error('Error stopping recording:', error);
+    await this.showToast('Error stopping the recording', 'danger');
   }
-  base64ToBlob(base64Data: string, contentType: string): Blob {
-    const byteCharacters = atob(base64Data); // Decodifica la stringa Base64
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    return new Blob([byteArray], { type: contentType });
-  }
+  this.logVariables(); // Aggiungi questa riga alla fine
+}
   async requestStoragePermissions() {
     try {
       const permissions = await Filesystem.requestPermissions();
@@ -642,29 +656,43 @@ formatTime(seconds: number): string {
       await this.showToast('Storage permission error', 'danger');
     }
   }
+  
   async saveRecording() {
-    if (!this.recordingData) return;
+    if (!this.currentFileName) {
+      console.error('Nessun file da salvare');
+      return;
+    }
   
     try {
       // Richiedi permessi
       await this.requestStoragePermissions();
-  
-      const fileName = `recording_${new Date().getTime()}.wav`;
       
-      const result = await Filesystem.writeFile({
-        path: fileName,
-        data: this.recordedAudio!,
-        directory: Directory.Documents,
-        recursive: true
+      console.log('Tentativo di lettura del file:', this.currentFileName);
+      
+      // Leggi il file dalla cache
+      const readResult = await Filesystem.readFile({
+        path: this.currentFileName,
+        directory: Directory.Cache
       });
-    
-      this.savedFilePath = result.uri; // Salviamo il percorso per usarlo altrove
-      console.log('File salvato:', result);
-      await this.showToast(`Recording saved in the main folder: ${result.uri}`, 'success');
+      
+      console.log('File letto dalla cache con successo');
+      
+      // Genera un nuovo nome file per la destinazione
+      const destinationFileName = `recording_${new Date().getTime()}.wav`;
+      
+      // Scrivi direttamente il contenuto nella directory Documents
+      const writeResult = await Filesystem.writeFile({
+        path: destinationFileName,
+        data: readResult.data, // Questo è il contenuto del file
+        directory: Directory.Documents
+      });
+      
+      this.savedFilePath = writeResult.uri;
+      console.log('File salvato in Documents:', writeResult.uri);
+      await this.showToast(`Recording saved: ${destinationFileName}`, 'success');
       this.isRecordingDownloaded = true;
     } catch (error) {
       console.error('Errore nel salvataggio:', error);
-      // Log dettagliato dell'errore
       if (error instanceof Error) {
         console.error('Error details:', error.message);
       }
@@ -680,22 +708,37 @@ formatTime(seconds: number): string {
     }
   }
   
-  async playRecording() {
-  if (!this.recordedAudio) return;
-
+// Il metodo playRecording deve essere aggiornato per usare il file locale
+async playRecording() {
   try {
-    // Se l'audio è già in riproduzione, fermalo prima di riprodurlo nuovamente
+    // Ferma la riproduzione precedente se esiste
     if (this.audioPlayer) {
       this.audioPlayer.pause();
-      this.audioPlayer.currentTime = 0;
+      this.audioPlayer = null;
     }
-
-    // Crea una nuova istanza Audio solo se necessario
-    this.audioPlayer = new Audio(`data:audio/wav;base64,${this.recordedAudio}`);
+    
+    let audioPath = '';
+    
+    // Se stiamo riproducendo dopo aver salvato, usa il percorso salvato
+    if (this.isRecordingDownloaded && this.savedFilePath) {
+      audioPath = Capacitor.convertFileSrc(this.savedFilePath);
+      console.log('Riproducendo file salvato:', audioPath);
+    } 
+    // Altrimenti usa il file nella cache
+    else if (this.recordingFilePath) {
+      audioPath = Capacitor.convertFileSrc(this.recordingFilePath);
+      console.log('Riproducendo file dalla cache:', audioPath);
+    } else {
+      console.error('Nessun file da riprodurre');
+      return;
+    }
+    
+    // Crea e riproduce l'audio
+    this.audioPlayer = new Audio(audioPath);
     this.audioPlayer.onended = () => {
-      this.playRecordedAudio = false; // Riproduzione terminata
+      this.playRecordedAudio = false;
     };
-
+    
     await this.audioPlayer.play();
     this.playRecordedAudio = true;
   } catch (error) {
@@ -704,32 +747,32 @@ formatTime(seconds: number): string {
   }
 }
 
-async stopPlayRecording() {
-  if (!this.audioPlayer) return;
+  async stopPlayRecording() {
+    if (!this.audioPlayer) return;
 
-  try {
-    this.audioPlayer.pause();
-    this.audioPlayer.currentTime = 0; // Riporta l'audio all'inizio
-    this.playRecordedAudio = false;
+    try {
+      this.audioPlayer.pause();
+      this.audioPlayer.currentTime = 0;
+      this.playRecordedAudio = false;
 
-        // Controlla se mostrare il popup di rating
-        const shouldShowRating = await this.ratingService.shouldShowRatingPrompt();
-        if (shouldShowRating) {
-          const modal = await this.modalCtrl.create({
-            component: RatingPopupComponent,
-            cssClass: 'transparent-modal',
-            backdropDismiss: true,
-            breakpoints: [0, 1],
-            initialBreakpoint: 1
-          });
-          await modal.present();
-        }
+      // Controlla se mostrare il popup di rating
+      const shouldShowRating = await this.ratingService.shouldShowRatingPrompt();
+      if (shouldShowRating) {
+        const modal = await this.modalCtrl.create({
+          component: RatingPopupComponent,
+          cssClass: 'transparent-modal',
+          backdropDismiss: true,
+          breakpoints: [0, 1],
+          initialBreakpoint: 1
+        });
+        await modal.present();
+      }
 
-  } catch (error) {
-    console.error('Error stopping playback:', error);
-    await this.showToast('Error stopping playback', 'danger');
+    } catch (error) {
+      console.error('Error stopping playback:', error);
+      await this.showToast('Error stopping playback', 'danger');
+    }
   }
-}
 
   private async showToast(message: string, color: 'success' | 'danger') {
     const toast = await this.toastController.create({
@@ -741,13 +784,25 @@ async stopPlayRecording() {
   
     await toast.present();
   }
-  closeSelectedBeat(){
+  // Aggiungi questo metodo per il debug
+logVariables() {
+  console.log('Debug variabili UI:');
+  console.log('recordingData presente:', !!this.recordingData);
+  console.log('recordingFilePath:', this.recordingFilePath);
+  console.log('isRecordingDownloaded:', this.isRecordingDownloaded);
+  console.log('playRecordedAudio:', this.playRecordedAudio);
+}
+  
+  closeSelectedBeat() {
     this.selectedBeat = null;
     this.recordedDuration = '';
     this.recordingData = null;
     this.isRecordingDownloaded = false;
-    this.recordedAudio = null;
+    this.recordingFilePath = null; // Modificato da recordedAudio
+    this.currentFileName = '';
+    this.savedFilePath = '';
   }
+  
   isAnyBeatRecording(): boolean {
     return this.beats.some(beat => beat.isRecording);
   }

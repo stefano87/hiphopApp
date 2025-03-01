@@ -51,7 +51,7 @@
            
       <ion-button *ngIf="!beat.isRecording" color="success" (click)="startRecording(beat)">
         <ion-icon slot="start" name="radio-outline"></ion-icon>
-        Record
+        Sing on the Beat
       </ion-button>
       
       <ion-button *ngIf="beat.isRecording" color="danger" (click)="stopRecording(beat)">
@@ -67,9 +67,12 @@
   <div class="selected-beat" *ngIf="selectedBeat">
     <div class="header">
       <h3>Recording Details <span *ngIf="selectedBeat?.isRecording" class="recording-timer">
-        <span>⏺️ {{ formatTime(recordingTime) }}</span>
+        <span>⏺️ {{ formatTime(recordingTime) }} / remaining: {{ formatRemainingTime() }}</span>
       </span> </h3>
-      
+      <!-- Puoi anche aggiungere una barra di progresso per il tempo -->
+<ion-progress-bar *ngIf="selectedBeat && selectedBeat.isRecording" 
+[value]="recordingTime / maxRecordingTime" 
+color="danger"></ion-progress-bar>
       <button class="close-button" (click)="closeSelectedBeat()">
         <ion-icon name="close-circle-outline"></ion-icon>
       </button>
@@ -87,7 +90,7 @@
       </div>
 
       <div class="actions">
-        <ion-button *ngIf="recordingData && !isRecordingDownloaded" 
+        <ion-button *ngIf="recordingFilePath && !isRecordingDownloaded"
                     expand="block" 
                     color="success" 
                     class="action-button"
@@ -105,7 +108,7 @@
           Open Saved Recording
         </ion-button>
 
-        <ion-button *ngIf="recordedAudio && !playRecordedAudio" 
+        <ion-button *ngIf="recordingFilePath && !playRecordedAudio" 
                     expand="block" 
                     color="tertiary"
                     class="action-button"
@@ -114,7 +117,7 @@
           Play Recording
         </ion-button>
 
-        <ion-button *ngIf="recordedAudio && playRecordedAudio" 
+        <ion-button *ngIf="recordingFilePath && playRecordedAudio" 
                     expand="block" 
                     color="danger"
                     class="action-button"

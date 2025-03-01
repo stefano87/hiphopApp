@@ -34,35 +34,60 @@
   <div class="container">
     <ion-card class="custom-card">
       <ion-card-content>
-        <h1 class="gradient-text">Want to gain more visibility?</h1>
+        <h1 class="gradient-text">Submit Your Song</h1>
         <p class="subtitle">
-          Don’t keep your songs to yourself, share them with all the app users.
+          Share your music with our community. If your song is selected, it will be featured here for all users to enjoy.
         </p>
-        <div class="price">Do you want to showcase your song here? Contact me to know how to proceed.</div>
-
-        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <div class="submission-info">
+          Submit your original song for review. Accepted submissions will be showcased in our community playlist.
+        </div>
+        
+        <form [formGroup]="songSubmissionForm" (ngSubmit)="onSubmit()">
           <ion-item>
-            <ion-label position="floating">Name</ion-label>
-            <ion-input type="text" formControlName="name"></ion-input>
+            <ion-label position="floating">Artist Name</ion-label>
+            <ion-input type="text" formControlName="artistName"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label position="floating">Email address</ion-label>
+            <ion-label position="floating">Email Address</ion-label>
             <ion-input type="email" formControlName="email"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label position="floating">Message</ion-label>
-            <ion-textarea formControlName="message" rows="4"></ion-textarea>
+            <ion-label position="floating">Song Title</ion-label>
+            <ion-input type="text" formControlName="songTitle"></ion-input>
           </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Description</ion-label>
+            <ion-textarea formControlName="description" rows="3" 
+              placeholder="Tell us about your song (genre, inspiration, etc.)">
+            </ion-textarea>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Song File (Max 3MB)</ion-label>
+            <input type="file" 
+              (change)="onFileSelected($event)" 
+              accept="audio/*"
+              class="ion-margin-top">
+          </ion-item>
+
+          <div class="error-message" *ngIf="fileError">
+            {{ fileError }}
+          </div>
 
           <ion-item lines="none">
             <ion-checkbox slot="start" formControlName="privacy"></ion-checkbox>
-            <ion-label slot="start" class="ion-padding-start">I accept the privacy policy</ion-label>
+            <ion-label class="ion-padding-start">
+              I accept the privacy policy and grant permission to share my music
+            </ion-label>
           </ion-item>
 
-          <ion-button expand="block" type="submit" [disabled]="!contactForm.valid">
-            Request Information
+          <ion-button expand="block" 
+            type="submit" 
+            [disabled]="!songSubmissionForm.valid || !selectedFile || fileError">
+            Submit Song
           </ion-button>
         </form>
       </ion-card-content>
