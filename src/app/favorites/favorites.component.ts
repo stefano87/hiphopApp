@@ -21,6 +21,7 @@ import { FavoritesService } from '../favorites.service';
 import { AdMobService } from '../services/admob.service';
 import { FileOpener } from '@capawesome-team/capacitor-file-opener';
 import { InfoModalComponent } from '../info-modal/info-modal.component';
+import { FirebaseAnalyticsService } from '../services/firebase-analytics.service';
 
 interface Beat {
   id: number;
@@ -77,7 +78,11 @@ recordingInterval: any = null; // ID del setInterval
 recordedDuration: string = ''; // Durata finale registrata
 savedFilePath: string = '';
 
-constructor(private modalCtrl: ModalController,private toastController: ToastController,private favoritesService: FavoritesService,private adMobService: AdMobService) {
+constructor(private modalCtrl: ModalController,
+  private toastController: ToastController,
+  private favoritesService: FavoritesService,
+  private adMobService: AdMobService,
+private FirebaseAnalytics: FirebaseAnalyticsService) {
   // Registra le icone
   addIcons({musicalNotesOutline,informationCircleOutline,radioOutline,stopOutline,heartDislike,closeCircleOutline,timeOutline,saveOutline,folderOpenOutline,playOutline,micCircleOutline,pauseOutline,heart,heartOutline});
  
@@ -86,6 +91,7 @@ constructor(private modalCtrl: ModalController,private toastController: ToastCon
   });
 }
   async ngOnInit() {
+    await this.FirebaseAnalytics.logEvent('page_view', { page: 'favorites' });
     console.log('Component initialized');
     console.log('favoriti: ', this.favorites);
     await this.initializeRecorder();
@@ -244,7 +250,7 @@ ngOnDestroy() {
      try {
        const recording = await VoiceRecorder.stopRecording();
        this.recordingData = recording;
-       this.recordedAudio = recording.value.recordDataBase64;
+      this.recordedAudio = recording.value.recordDataBase64 || null;
        beat.isRecording = false;
  
        // Ferma il timer

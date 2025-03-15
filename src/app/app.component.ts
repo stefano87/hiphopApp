@@ -25,6 +25,8 @@ export class AppComponent implements OnInit, OnDestroy{
       
       // Mostra il banner
       await this.adMobService.showBanner();
+
+      
     } catch (error) {
       console.error('Errore nell\'inizializzazione dell\'app:', error);
     }

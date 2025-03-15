@@ -27,6 +27,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import emailjs from '@emailjs/browser';
 import { InfoModalComponent } from '../info-modal/info-modal.component';
 import { AdMobService } from '../services/admob.service';
+import { FirebaseAnalyticsService } from '../services/firebase-analytics.service';
 
 @Component({
   selector: 'app-community',
@@ -68,6 +69,7 @@ export class CommunityComponent implements OnInit {
     private adMobService: AdMobService,
     private toastController: ToastController,
     private modalCtrl: ModalController,
+    private FirebaseAnalytics: FirebaseAnalyticsService
   ) {
     this.songSubmissionForm = this.fb.group({
       artistName: ['', Validators.required],
@@ -81,6 +83,7 @@ export class CommunityComponent implements OnInit {
   async ngOnInit() {
     try {
       await this.adMobService.showInterstitial();
+      await this.FirebaseAnalytics.logEvent('page_view', { page: 'community' });
     } catch (error) {
       console.error('Error showing interstitial:', error);
     }

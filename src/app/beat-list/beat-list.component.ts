@@ -21,11 +21,12 @@ import {
   heart,
   heartOutline, folderOpenOutline, micCircleOutline, closeCircleOutline, timeOutline, informationCircleOutline, people, 
   musicalNotes,
-  mic} from 'ionicons/icons';
+  mic } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { Capacitor } from '@capacitor/core';
 import { FavoritesService } from '../favorites.service';
 import { InfoModalComponent } from '../info-modal/info-modal.component';
+import { FirebaseAnalyticsService } from '../services/firebase-analytics.service';
 
 interface Beat {
   id: number;
@@ -399,7 +400,8 @@ remainingTime: number = 240;
     private favoritesService: FavoritesService,
     private adMobService: AdMobService,
     private modalCtrl: ModalController,
-    private ratingService: RatingService) {
+    private ratingService: RatingService,
+  private FirebaseAnalytics: FirebaseAnalyticsService) {
     // Registra le icone
     addIcons({micCircleOutline,informationCircleOutline,musicalNotes,mic,people,radioOutline,stopOutline,closeCircleOutline,musicalNotesOutline,timeOutline,saveOutline,folderOpenOutline,playOutline,pauseOutline,heart,heartOutline});
 
@@ -409,6 +411,8 @@ remainingTime: number = 240;
   }
 
   async ngOnInit() {
+    // Traccia l'evento con il servizio
+    await this.FirebaseAnalytics.logEvent('page_view', { page: 'home' });
     this.initializeApp();
     console.log('Component initialized');
     await this.initializeRecorder();
@@ -620,7 +624,7 @@ async stopRecording(beat: Beat) {
     // Salva direttamente nella directory Cache
     const result = await Filesystem.writeFile({
       path: fileName,
-      data: recording.value.recordDataBase64,
+      data: recording.value.recordDataBase64 || '',
       directory: Directory.Cache
     });
     
