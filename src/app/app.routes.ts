@@ -18,7 +18,7 @@ export const routes: Routes = [
   {
     path: 'tab3',
     loadComponent: () => 
-      import('./community/community.component').then((m) => m.CommunityComponent),
+      import('./webradio/webradio.component').then((m) => m.WebradioComponent),
   },
   {
     path: 'about',

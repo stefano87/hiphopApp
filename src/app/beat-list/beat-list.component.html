@@ -38,7 +38,6 @@
     <ion-item *ngFor="let beat of beats" [ngClass]="{'hidden': isAnyBeatRecording() && !beat.isRecording}">
       <ion-label>
         <h2>{{ beat.name }}</h2>
-        <p>Hip Hop Beat</p>
       </ion-label>
       
       <ion-button fill="clear" (click)="playBeat(beat)">
@@ -51,29 +50,30 @@
            
       <ion-button *ngIf="!beat.isRecording" color="success" (click)="startRecording(beat)">
         <ion-icon slot="start" name="radio-outline"></ion-icon>
-        Sing on the Beat
+        Sing & Record
       </ion-button>
       
       <ion-button *ngIf="beat.isRecording" color="danger" (click)="stopRecording(beat)">
         <ion-icon slot="start" name="stop-outline"></ion-icon>
         Stop
       </ion-button>
-
-      
   
     </ion-item>
   </ion-list>
 
   <div class="selected-beat" *ngIf="selectedBeat">
     <div class="header">
-      <h3>Recording Details <span *ngIf="selectedBeat?.isRecording" class="recording-timer">
+      <h3>Recording Details </h3>
+      <div>
+        <span *ngIf="selectedBeat?.isRecording" class="recording-timer">
         <span>⏺️ {{ formatTime(recordingTime) }} / remaining: {{ formatRemainingTime() }}</span>
-      </span> </h3>
+      </span> 
+      </div>
       <!-- Puoi anche aggiungere una barra di progresso per il tempo -->
 <ion-progress-bar *ngIf="selectedBeat && selectedBeat.isRecording" 
 [value]="recordingTime / maxRecordingTime" 
 color="danger"></ion-progress-bar>
-      <button class="close-button" (click)="closeSelectedBeat()">
+      <button *ngIf="recordedDuration" class="close-button" (click)="closeSelectedBeat()">
         <ion-icon name="close-circle-outline"></ion-icon>
       </button>
     </div>

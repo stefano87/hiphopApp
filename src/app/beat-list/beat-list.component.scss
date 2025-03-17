@@ -19,7 +19,7 @@
       background-position: center;
       background-repeat: repeat;
       margin: 0;
-      padding: 16px;
+      padding: 16px 5px;
       
       ion-item {
         --background: rgb(30 30 30 / 95%);
@@ -108,9 +108,9 @@
       border: none;
       padding: 8px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute;
+      right: 10px;
+      top: 10px;
     }
 
     .close-button ion-icon {
