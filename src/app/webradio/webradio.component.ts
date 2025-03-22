@@ -82,63 +82,55 @@ export class WebradioComponent  implements OnInit, OnDestroy {
       description: 'The #1 Internet Hip Hop Radio Station',
       genre: 'Hip Hop / Urban',
       url: 'https://live.streamthe.world/hot108',
-      artwork: 'assets/stations/hot108jamz.webp'
+      artwork: '../../assets/stations/hot108.png'
     },
     {
       id: 3,
-      name: 'Hip Hop Classics',
+      name: 'Flow 103',
       description: 'Old school hip hop and golden era classics',
-      genre: 'Hip Hop Classics',
-      url: 'https://stream.laut.fm/oldschool',
-      artwork: 'assets/stations/hiphopcl.webp'
+      genre: 'Hip Hop/R&B',
+      url: 'https://ais-sa3.cdnstream1.com/1668_128',
+      artwork: '../../assets/stations/flow-103.jpg'
     },
     {
       id: 4,
-      name: 'Freestyle Beatbox',
-      description: 'Instrumental beats and freestyles',
-      genre: 'Hip Hop Beats',
-      url: 'https://stream.laut.fm/freestyle',
-      artwork: 'assets/stations/freestyle.webp'
+      name: 'WHAT?! Radio',
+      description: 'Classic Hip Hop',
+      genre: 'Classic Hip Hop',
+      url: 'http://162.144.106.6:9119/stream?type=http&nocache=224109',
+      artwork: '../../assets/stations/what.jpeg'
     },
     {
       id: 5,
-      name: 'Trap City Radio',
-      description: 'Latest trap and modern hip hop',
-      genre: 'Trap / Modern Hip Hop',
-      url: 'https://stream.zeno.fm/0r0xa792kwzuv',
-      artwork: 'assets/stations/trapcity.webp'
-    },
-    {
-      id: 6,
       name: 'Hip Hop Lounge',
       description: 'Chill hip hop and lofi beats',
       genre: 'Lofi Hip Hop',
       url: 'https://stream.laut.fm/lofi',
-      artwork: 'assets/stations/lounge.webp'
+      artwork: '../../assets/stations/lounge.jpeg'
+    },
+    {
+      id: 6,
+      name: 'DTLR Radio',
+      description: 'Hip Hop and R&B from the 90s and 2000s',
+      genre: 'Hip Hop',
+      url: 'http://108.178.13.122:8195/stream?type=http&nocache=18421',
+      artwork: '../../assets/stations/dtlr.webp'
     },
     {
       id: 7,
-      name: 'KDAY 93.5',
-      description: 'LA\'s original hip hop station',
-      genre: 'Classic Hip Hop',
-      url: 'https://live.amperwave.net/direct/audacy-kdayfmaac-imc',
-      artwork: 'assets/stations/kday.webp'
+      "name": "100 Hip Hop and RNB FM",
+      "description": "24/7 Hip Hop and R&B hits",
+      "genre": "Hip Hop/R&B",
+      "url": "http://192.99.41.102:5036/stream?type=http&nocache=120614",
+      "artwork": "../../assets/stations/logo-lftm-400px.png"
     },
     {
       id: 8,
-      name: 'BackSpin',
-      description: 'Classic and throwback hip hop',
-      genre: 'Classic Hip Hop',
-      url: 'https://live.audacy.com/stations/backspin/THRBEATAC.mp3',
-      artwork: 'assets/stations/backspin.webp'
-    },
-    {
-      id: 9,
       name: 'Trap City Radio',
       description: 'Latest trap and modern hip hop',
       genre: 'Trap / Modern Hip Hop',
       url: 'http://stream.zeno.fm/0r0xa792kwzuv',
-      artwork: 'assets/stations/trapcity.webp'
+      artwork: '../../assets/stations/trapcity.jpeg'
     }
   ];
 
@@ -194,7 +186,6 @@ export class WebradioComponent  implements OnInit, OnDestroy {
             this.audioPlayer.pause();
           }
           
-          alert('Showing ad');
           // Mostra l'annuncio interstiziale
           await this.adMobService.showInterstitial();
           
