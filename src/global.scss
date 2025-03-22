@@ -37,94 +37,125 @@
 @import '@ionic/angular/css/palettes/dark.system.css';
 
 :root {
-    --background-image: url('assets/background-hiphop.webp');
-  }
-  ion-toolbar {
-    --background: linear-gradient(135deg, #232323 0%, #2d2d2d 100%);
-    --border-width: 0 !important;
-    padding-top: 10px !important;
-    padding-bottom:10px;
-  }
-  ion-tab-bar {
-    --background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-    --border-width: 0 !important;
-    padding: 0px 0 0 0;
-    margin-bottom: 60px;
+  --background-image: url('assets/background-hiphop.webp');
+  --safe-area-top: env(safe-area-inset-top);  
+}
+
+/* Supporto per notch e safe areas */
+.safe-area-header {
+  padding-top: var(--safe-area-top, 0);
+}
+ion-header {
+  margin-top: 30px;
+  padding-top: var(--ion-safe-area-top, 0px);
+}
+ion-toolbar {
+  --background: linear-gradient(135deg, #232323 0%, #2d2d2d 100%);
+  --border-width: 0 !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px;
+}
+
+ion-tab-bar {
+  --background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  --border-width: 0 !important;
+  padding: 0px 0 0 0;
+  margin-bottom: 60px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.main-icon {
+  font-size: 2.4rem;
+  color: #4CAF50;
+}
+
+.title-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title-text h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.title-text p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #b3b3b3;
+  font-weight: 500;
+}
+
+.about-button {
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+
+.about-button ion-icon {
+  font-size: 1.8rem;
+  color: #4CAF50;
+}
+
+.info-modal {
+  --height: 90%;
+  --width: 90%;
+  --max-width: 600px;
+  --border-radius: 20px;
+
+  &::part(content) {
+    border-radius: 20px;
   }
 
-  .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 16px;
+  ion-content {
+    --background: var(--ion-background-color);
   }
+}
 
-  .title-section {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .main-icon {
-    font-size: 2.4rem;
-    color: #4CAF50;
-  }
-
-  .title-text {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
+@media (max-width: 480px) {
   .title-text h1 {
-    margin: 0;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 0.5px;
+    font-size: 1.1rem;
   }
 
   .title-text p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #b3b3b3;
-    font-weight: 500;
+    font-size: 0.75rem;
   }
 
-  .about-button {
-    --padding-start: 8px;
-    --padding-end: 8px;
-  }
-
-  .about-button ion-icon {
+  .main-icon {
     font-size: 1.8rem;
-    color: #4CAF50;
   }
-  .info-modal {
-    --height: 90%;
-    --width: 90%;
-    --max-width: 600px;
-    --border-radius: 20px;
-    
-    &::part(content) {
-      border-radius: 20px;
-    }
   
-    ion-content {
-      --background: var(--ion-background-color);
-    }
+  .title-section {
+    gap: 8px;
   }
-
-  @media (max-width: 480px) {
-    .title-text h1 {
-      font-size: 1.2rem;
-    }
-
-    .title-text p {
-      font-size: 0.8rem;
-    }
-
-    .main-icon {
-      font-size: 2rem;
-    }
+  
+  .title-section img {
+    max-width: 35px;
+    height: auto;
   }
+}
+  /* Supporto specifico per dispositivi con notch */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-area-header {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  ion-toolbar {
+    padding-top: env(safe-area-inset-top) !important;
+  }
+}

@@ -21,6 +21,8 @@ import {
   playSkipForwardOutline} from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { AdMobService } from '../services/admob.service';
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { FirebaseAnalyticsService } from '../services/firebase-analytics.service';
 interface RadioStation {
   id: number;
   name: string;
@@ -144,12 +146,19 @@ export class WebradioComponent  implements OnInit, OnDestroy {
   constructor(
     private modalController: ModalController,
     private toastController: ToastController,
-    private adMobService: AdMobService) {
+    private adMobService: AdMobService,
+    private FirebaseAnalytics: FirebaseAnalyticsService) {
     this.audioPlayer = new Audio();
     addIcons({playSkipForwardOutline,playSkipBackOutline,micCircleOutline,informationCircleOutline,musicalNotes,mic,people,radioOutline,stopOutline,closeCircleOutline,musicalNotesOutline,timeOutline,saveOutline,folderOpenOutline,playOutline,pauseOutline,heart,heartOutline});
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.FirebaseAnalytics.logEvent('page_view', { page: 'radio' });
+    // Imposta il testo della barra di stato a bianco (per sfondi scuri)
+    await StatusBar.setStyle({ style: Style.Dark	 });
+        
+    // Imposta il colore di sfondo della barra di stato
+    await StatusBar.setBackgroundColor({ color: '#282828' });
     // Configurazione iniziale del player audio
     this.audioPlayer.volume = this.volume;
     

@@ -10,6 +10,7 @@ import { FileOpener } from '@capawesome-team/capacitor-file-opener';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Preferences } from '@capacitor/preferences';
 import { AdMobService } from '../services/admob.service';
+import { StatusBar, Style } from '@capacitor/status-bar';
 import { 
   playOutline, 
   pauseOutline, 
@@ -425,6 +426,11 @@ remainingTime: number = 240;
         showDuration: 2000,
         autoHide: true
       });
+      // Imposta il testo della barra di stato a bianco (per sfondi scuri)
+      await StatusBar.setStyle({ style: Style.Dark	 });
+        
+      // Imposta il colore di sfondo della barra di stato
+      await StatusBar.setBackgroundColor({ color: '#282828' });
     } catch (err) {
       console.log('Errore durante l\'inizializzazione dello splash screen', err);
     }

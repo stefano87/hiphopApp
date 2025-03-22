@@ -22,7 +22,7 @@ import { AdMobService } from '../services/admob.service';
 import { FileOpener } from '@capawesome-team/capacitor-file-opener';
 import { InfoModalComponent } from '../info-modal/info-modal.component';
 import { FirebaseAnalyticsService } from '../services/firebase-analytics.service';
-
+import { StatusBar, Style } from '@capacitor/status-bar';
 interface Beat {
   id: number;
   name: string;
@@ -94,6 +94,11 @@ private FirebaseAnalytics: FirebaseAnalyticsService) {
     await this.FirebaseAnalytics.logEvent('page_view', { page: 'favorites' });
     console.log('Component initialized');
     console.log('favoriti: ', this.favorites);
+    // Imposta il testo della barra di stato a bianco (per sfondi scuri)
+    await StatusBar.setStyle({ style: Style.Dark	 });
+        
+    // Imposta il colore di sfondo della barra di stato
+    await StatusBar.setBackgroundColor({ color: '#282828' });
     await this.initializeRecorder();
     this.setupAudioEventListeners();
     

@@ -1,4 +1,4 @@
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border safe-area-header">
   <ion-toolbar>
     <div class="header-content">
       <div class="title-section">
@@ -18,7 +18,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen="true">
   <ion-list [ngClass]="{'recording-mode': isAnyBeatRecording()}">
     <ion-item *ngIf="favorites.length === 0">
       <ion-label>
