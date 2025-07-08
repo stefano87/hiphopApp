@@ -64,15 +64,16 @@
   <div class="selected-beat" *ngIf="selectedBeat">
     <div class="header">
       <h3>Recording Details </h3>
-      <div>
+      <div class="recoreded-duration">
         <span *ngIf="selectedBeat?.isRecording" class="recording-timer">
-        <span>⏺️ {{ formatTime(recordingTime) }} / remaining: {{ formatRemainingTime() }}</span>
+        <span>⏺️ {{ formatTime(recordingTime) }} <br> Remaining: {{ formatRemainingTime() }}</span>
       </span> 
-      </div>
-      <!-- Puoi anche aggiungere una barra di progresso per il tempo -->
+            <!-- Puoi anche aggiungere una barra di progresso per il tempo -->
 <ion-progress-bar *ngIf="selectedBeat && selectedBeat.isRecording" 
 [value]="recordingTime / maxRecordingTime" 
 color="danger"></ion-progress-bar>
+      </div>
+
       <button *ngIf="recordedDuration" class="close-button" (click)="closeSelectedBeat()">
         <ion-icon name="close-circle-outline"></ion-icon>
       </button>
