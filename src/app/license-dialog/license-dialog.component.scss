@@ -1,0 +1,57 @@
+ .license-content {
+      max-width: 100%;
+    }
+    
+    .terms-list {
+      margin: 20px 0;
+    }
+    
+    .terms-list h3 {
+      color: var(--ion-color-primary);
+      margin: 15px 0 10px 0;
+    }
+    
+    .terms-list ul {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+    
+    .terms-list li {
+      margin: 8px 0;
+      line-height: 1.4;
+    }
+    
+    .important-notice {
+      background: var(--ion-color-light);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    
+    .important-notice ion-icon {
+      margin-top: 2px;
+      font-size: 20px;
+    }
+    
+    .confirmation-text {
+      margin: 20px 0;
+      padding: 15px;
+      background: var(--ion-color-primary-tint);
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 16px;
+    }
+    
+    .button-container ion-button {
+      flex: 1;
+      margin: 0 8px;
+    }

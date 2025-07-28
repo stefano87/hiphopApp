@@ -1,0 +1,54 @@
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Music License Agreement</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content class="ion-padding">
+      <div class="license-content">
+        <h2>Pixabay Music License Terms</h2>
+        
+        <p>By using this app, you acknowledge and agree to the following terms regarding the music content:</p>
+        
+        <div class="terms-list">
+          <h3>✓ You may:</h3>
+          <ul>
+            <li>Use the beats within this app for recording your voice</li>
+            <li>Create mixed recordings combining your voice with the provided beats</li>
+            <li>Save your personal recordings locally on your device</li>
+          </ul>
+          
+          <h3>✗ You may NOT:</h3>
+          <ul>
+            <li>Download, extract, or redistribute the original beat files</li>
+            <li>Share or sell the original music tracks outside this app</li>
+            <li>Claim ownership of the original beats</li>
+            <li>Register mixed recordings in Content ID or rights management systems</li>
+            <li>Use the music for commercial purposes outside of this app</li>
+          </ul>
+        </div>
+        
+        <div class="important-notice">
+          <ion-icon name="information-circle" color="primary"></ion-icon>
+          <p><strong>Important:</strong> All music is provided under Pixabay's Content License. The beats are for creative use within this app only. Your voice recordings are yours, but the underlying music remains licensed content.</p>
+        </div>
+        
+        <div class="confirmation-text">
+          <p>By clicking "I Accept", you confirm that you have read, understood, and agree to comply with these license terms.</p>
+        </div>
+      </div>
+    </ion-content>
+    
+    <ion-footer>
+      <ion-toolbar>
+        <div class="button-container">
+          <ion-button 
+            fill="solid" 
+            color="primary" 
+            expand="block"
+            (click)="accept()">
+            I Accept & Continue
+          </ion-button>
+        </div>
+      </ion-toolbar>
+    </ion-footer>
