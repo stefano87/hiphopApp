@@ -141,7 +141,9 @@ export class WebradioComponent  implements OnInit, OnDestroy {
   isPlaying: boolean = false;
   volume: number = 0.7;
   private adInterval: any;
-  private readonly AD_DISPLAY_INTERVAL = 180000;
+  private adTimeout: any;
+  private readonly INITIAL_AD_DELAY = 40000;
+  private readonly AD_DISPLAY_INTERVAL = 120000;
 
   constructor(
     private modalController: ModalController,
@@ -179,37 +181,36 @@ export class WebradioComponent  implements OnInit, OnDestroy {
     this.startAdTimer();
   }
   private startAdTimer() {
-    // Pulisci qualsiasi timer esistente prima di crearne uno nuovo
     this.clearAdTimer();
-    
-    // Crea un nuovo timer che mostra un annuncio ogni 3 minuti
-    this.adInterval = setInterval(() => {
-      // Usa una funzione asincrona immediata (IIFE) all'interno del setInterval
-      (async () => {
-        try {
-          // Salva lo stato di riproduzione corrente
-          const wasPlaying = this.isPlaying;
-          
-          // Metti in pausa la radio se è in riproduzione
-          if (wasPlaying) {
-            this.audioPlayer.pause();
-          }
-          
-          // Mostra l'annuncio interstiziale
-          await this.adMobService.showInterstitial();
-          
-          // Riprendi la riproduzione se era attiva prima dell'annuncio
-          if (wasPlaying) {
 
-            this.audioPlayer.play().catch(error => {
-              this.showToast(`Impossibile riprendere la riproduzione. Riprova.`, 'danger');
-            });
-          }
-        } catch (error) {
-          console.error('Errore durante la visualizzazione dell\'annuncio:', error);
+    this.adTimeout = setTimeout(() => {
+      this.showRadioInterstitial();
+      this.adInterval = setInterval(() => {
+        this.showRadioInterstitial();
+      }, this.AD_DISPLAY_INTERVAL);
+    }, this.INITIAL_AD_DELAY);
+  }
+
+  private showRadioInterstitial() {
+    (async () => {
+      try {
+        const wasPlaying = this.isPlaying;
+
+        if (wasPlaying) {
+          this.audioPlayer.pause();
         }
-      })();
-    }, this.AD_DISPLAY_INTERVAL);
+
+        await this.adMobService.showInterstitial();
+
+        if (wasPlaying) {
+          this.audioPlayer.play().catch(() => {
+            this.showToast('Impossibile riprendere la riproduzione. Riprova.', 'danger');
+          });
+        }
+      } catch (error) {
+        console.error('Errore durante la visualizzazione dell\'annuncio:', error);
+      }
+    })();
   }
 
   private async showToast(message: string, color: 'success' | 'danger') {
@@ -232,6 +233,10 @@ export class WebradioComponent  implements OnInit, OnDestroy {
   }
    // Metodo per pulire il timer degli annunci
   private clearAdTimer() {
+    if (this.adTimeout) {
+      clearTimeout(this.adTimeout);
+      this.adTimeout = null;
+    }
     if (this.adInterval) {
       clearInterval(this.adInterval);
       this.adInterval = null;

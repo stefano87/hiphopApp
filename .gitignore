@@ -69,3 +69,7 @@ testem.log
 .DS_Store
 Thumbs.db
 .qodo
+
+# Flutter/Android release artifacts (keep locally; debug APK exceeds GitHub 100MB limit)
+*.apk
+HipHopBeats-release.aab

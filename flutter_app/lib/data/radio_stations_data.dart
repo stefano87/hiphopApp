@@ -1,0 +1,68 @@
+import '../models/radio_station.dart';
+
+const radioStations = <RadioStation>[
+  RadioStation(
+    id: 1,
+    name: 'Hot 97',
+    description: "New York's #1 for Hip Hop and R&B",
+    genre: 'Hip Hop / R&B',
+    url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/WQHTFM.mp3',
+    artwork: 'assets/stations/hot97.png',
+  ),
+  RadioStation(
+    id: 2,
+    name: 'HOT 108 JAMZ',
+    description: 'The #1 Internet Hip Hop Radio Station',
+    genre: 'Hip Hop / Urban',
+    url: 'https://live.streamtheworld/hot108',
+    artwork: 'assets/stations/hot108.png',
+  ),
+  RadioStation(
+    id: 3,
+    name: 'Flow 103',
+    description: 'Old school hip hop and golden era classics',
+    genre: 'Hip Hop/R&B',
+    url: 'https://ais-sa3.cdnstream1.com/1668_128',
+    artwork: 'assets/stations/flow-103.jpg',
+  ),
+  RadioStation(
+    id: 4,
+    name: 'WHAT?! Radio',
+    description: 'Classic Hip Hop',
+    genre: 'Classic Hip Hop',
+    url: 'http://162.144.106.6:9119/stream?type=http&nocache=224109',
+    artwork: 'assets/stations/what.jpeg',
+  ),
+  RadioStation(
+    id: 5,
+    name: 'Hip Hop Lounge',
+    description: 'Chill hip hop and lofi beats',
+    genre: 'Lofi Hip Hop',
+    url: 'https://stream.laut.fm/lofi',
+    artwork: 'assets/stations/lounge.jpeg',
+  ),
+  RadioStation(
+    id: 6,
+    name: 'DTLR Radio',
+    description: 'Hip Hop and R&B from the 90s and 2000s',
+    genre: 'Hip Hop',
+    url: 'http://108.178.13.122:8195/stream?type=http&nocache=18421',
+    artwork: 'assets/stations/dtlr.webp',
+  ),
+  RadioStation(
+    id: 7,
+    name: '100 Hip Hop and RNB FM',
+    description: '24/7 Hip Hop and R&B hits',
+    genre: 'Hip Hop/R&B',
+    url: 'http://192.99.41.102:5036/stream?type=http&nocache=120614',
+    artwork: 'assets/stations/logo-lftm-400px.png',
+  ),
+  RadioStation(
+    id: 8,
+    name: 'Trap City Radio',
+    description: 'Latest trap and modern hip hop',
+    genre: 'Trap / Modern Hip Hop',
+    url: 'http://stream.zeno.fm/0r0xa792kwzuv',
+    artwork: 'assets/stations/trapcity.jpeg',
+  ),
+];
