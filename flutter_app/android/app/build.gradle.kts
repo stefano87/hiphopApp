@@ -61,3 +61,9 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+  // Meta Audience Network mediation adapter (bidding via AdMob).
+  // https://developers.google.com/admob/android/mediation/meta
+  implementation("com.google.ads.mediation:facebook:6.21.0.3")
+}

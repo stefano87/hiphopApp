@@ -21,6 +21,11 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-5162875721816233~7320072617" />
 
+        <!-- Meta Audience Network App ID (required for AdMob mediation bidding). -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="1533492195079867" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
